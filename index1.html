@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGPC Aptitude Test - TISS Tuljapur</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%); }
+        .timer-warning { animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6 shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center">
+                <h1 class="text-3xl font-bold mb-2">Career Guidance and Placement Cell</h1>
+                <h2 class="text-xl font-medium mb-1">TISS Tuljapur (2024-2026 Batch)</h2>
+                <h3 class="text-lg">CGPC Aptitude Test – Saturday, 2nd August, 2025</h3>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Student Registration Form -->
+        <div id="registrationForm" class="bg-white rounded-xl shadow-lg p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Student Registration</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+                    <input type="text" id="fullName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your full name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email ID *</label>
+                    <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="your.email@tiss.edu">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Roll Number *</label>
+                    <input type="text" id="rollNumber" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter roll number">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Programme *</label>
+                    <select id="programme" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">Select Programme</option>
+                        <option value="MSW-RD">M.A. Social Work (Rural Development)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Year *</label>
+                    <select id="year" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">Select Year</option>
+                        <option value="1st Year">1st Year</option>
+                        <option value="2nd Year">2nd Year</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="mt-8 text-center">
+                <button id="startTestBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                    Start Aptitude Test
+                </button>
+            </div>
+        </div>
+
+        <!-- Test Interface -->
+        <div id="testInterface" class="hidden">
+            <!-- Timer and Progress -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <div class="text-lg font-semibold text-gray-700">
+                            Question <span id="currentQ">1</span> of 25
+                        </div>
+                        <div class="bg-gray-200 rounded-full h-2 w-64">
+                            <div id="progressBar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 4%"></div>
+                        </div>
+                    </div>
+                    <div id="timer" class="text-2xl font-bold text-blue-600">30:00</div>
+                </div>
+                <div class="mt-4 text-sm text-gray-600">
+                    Section: <span id="currentSection" class="font-semibold text-blue-600">Logical Reasoning</span>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+                <div id="questionContent" class="fade-in">
+                    <!-- Questions will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex justify-between items-center">
+                <button id="prevBtn" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition-colors" disabled>
+                    Previous
+                </button>
+                <div class="flex space-x-2">
+                    <button id="markBtn" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                        Mark for Review
+                    </button>
+                    <button id="clearBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                        Clear
+                    </button>
+                </div>
+                <button id="nextBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    Next
+                </button>
+            </div>
+
+            <!-- Question Palette -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mt-6">
+                <h3 class="text-lg font-semibold mb-4">Question Palette</h3>
+                <div class="grid grid-cols-5 gap-2" id="questionPalette">
+                    <!-- Question numbers will be generated here -->
+                </div>
+                <div class="mt-4 flex flex-wrap gap-4 text-sm">
+                    <div class="flex items-center"><div class="w-4 h-4 bg-green-500 rounded mr-2"></div>Answered</div>
+                    <div class="flex items-center"><div class="w-4 h-4 bg-yellow-500 rounded mr-2"></div>Marked for Review</div>
+                    <div class="flex items-center"><div class="w-4 h-4 bg-red-500 rounded mr-2"></div>Not Answered</div>
+                    <div class="flex items-center"><div class="w-4 h-4 bg-blue-500 rounded mr-2"></div>Current</div>
+                </div>
+            </div>
+
+            <!-- Submit Test Button -->
+            <div class="text-center mt-8">
+                <button id="submitTestBtn" onclick="submitTestNow()" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors text-xl">
+                    🚀 SUBMIT TEST 🚀
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">🎉 Test Results 🎉</h2>
+                
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="text-center">
+                        <div class="text-6xl font-bold text-blue-600 mb-2" id="totalScore">0</div>
+                        <div class="text-xl text-gray-600">out of 25</div>
+                        <div class="text-lg font-semibold mt-2" id="resultStatus">Result Status</div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Section-wise Analysis</h3>
+                        <div id="sectionAnalysis" class="space-y-2">
+                            <!-- Section scores will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Answer Review Section -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-2xl font-semibold">📝 Answer Review</h3>
+                        <button id="toggleAnswers" onclick="toggleAnswerReview()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                            Show Answers
+                        </button>
+                    </div>
+                    <div id="answerReview" class="hidden space-y-4 max-h-96 overflow-y-auto">
+                        <!-- Answer review will be displayed here -->
+                    </div>
+                </div>
+
+                <!-- Test Statistics -->
+                <div class="border-t pt-8">
+                    <h3 class="text-2xl font-semibold mb-6">📊 Test Statistics</h3>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="bg-blue-50 p-6 rounded-lg text-center">
+                            <div class="text-3xl font-bold text-blue-600 mb-2" id="totalRespondents">0</div>
+                            <div class="text-sm text-blue-700">Total Respondents</div>
+                        </div>
+                        <div class="bg-green-50 p-6 rounded-lg text-center">
+                            <div class="text-3xl font-bold text-green-600 mb-2" id="passedCount">0</div>
+                            <div class="text-sm text-green-700">Students Passed</div>
+                        </div>
+                        <div class="bg-red-50 p-6 rounded-lg text-center">
+                            <div class="text-3xl font-bold text-red-600 mb-2" id="failedCount">0</div>
+                            <div class="text-sm text-red-700">Students Failed</div>
+                        </div>
+                    </div>
+                    <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-semibold text-gray-800 mb-2">Recent Test Submissions:</h4>
+                        <div id="recentSubmissions" class="text-sm text-gray-600">
+                            <!-- Recent submissions will appear here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Test Management -->
+                    <div class="mt-6 p-4 bg-green-50 rounded-lg">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="font-semibold text-green-800">🔄 Test Management</h4>
+                            <button id="startNewTestBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                🆕 Start New Test
+                            </button>
+                        </div>
+                        <div class="text-sm text-green-700">
+                            <p class="mb-2">💡 <strong>Question Randomization:</strong></p>
+                            <ul class="list-disc list-inside space-y-1 ml-4">
+                                <li><strong>Unique Questions:</strong> Each test generates 25 random questions from a pool of 50+ questions</li>
+                                <li><strong>No Repeats:</strong> Every student gets a different set of questions</li>
+                                <li><strong>Fair Distribution:</strong> 5 questions from each section (Logical, Quantitative, Data, Verbal, General)</li>
+                                <li><strong>Fresh Start:</strong> Click "Start New Test" to generate a completely new question set</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test state
+        let currentQuestion = 0;
+        let timeLeft = 1800; // 30 minutes
+        let timerInterval = null;
+        let answers = {};
+        let markedForReview = new Set();
+        let studentData = {};
+        
+        // Statistics tracking
+        let testStatistics = {
+            totalRespondents: 0,
+            passedCount: 0,
+            failedCount: 0,
+            recentSubmissions: []
+        };
+
+        // Student records storage
+        let studentRecords = [];
+
+        // Question bank - larger pool for randomization
+        const questionBank = [
+            {
+                section: "Logical Reasoning",
+                question: "What comes next in the series: 2, 6, 12, 20, 30, ?",
+                options: ["40", "42", "44", "36"],
+                correct: 1
+            },
+            {
+                section: "Logical Reasoning",
+                question: "If CODING is written as DPEJOH, how is FLOWER written?",
+                options: ["GMPXFS", "GMPXFR", "GKPXFS", "GMPWFS"],
+                correct: 0
+            },
+            {
+                section: "Logical Reasoning",
+                question: "A is the brother of B. C is the sister of A. D is the brother of C. How is B related to D?",
+                options: ["Brother", "Sister", "Cousin", "Cannot be determined"],
+                correct: 3
+            },
+            {
+                section: "Logical Reasoning",
+                question: "Find the odd one out: 23, 29, 31, 37, 43, 47, 51",
+                options: ["31", "43", "51", "29"],
+                correct: 2
+            },
+            {
+                section: "Logical Reasoning",
+                question: "Statements: All blocks are bricks. All bricks are stones.\nConclusions:\nI. All blocks are stones.\nII. Some stones are blocks.",
+                options: ["Only I follows", "Only II follows", "Both follow", "Neither follows"],
+                correct: 2
+            },
+            {
+                section: "Quantitative Aptitude",
+                question: "A train 120 m long runs at a speed of 60 km/h. How much time will it take to cross a platform 180 m long?",
+                options: ["18 sec", "20 sec", "21 sec", "22 sec"],
+                correct: 0
+            },
+            {
+                section: "Quantitative Aptitude",
+                question: "If the simple interest on ₹800 for 3 years is ₹144, what is the rate of interest per annum?",
+                options: ["5%", "6%", "7%", "8%"],
+                correct: 1
+            },
+            {
+                section: "Quantitative Aptitude",
+                question: "The average of 5 numbers is 27. If one number is excluded, the average becomes 25. The excluded number is:",
+                options: ["35", "30", "25", "40"],
+                correct: 0
+            },
+            {
+                section: "Quantitative Aptitude",
+                question: "A shopkeeper marks his goods 40% above cost price and gives a discount of 20%. His profit percentage is:",
+                options: ["10%", "12%", "15%", "20%"],
+                correct: 1
+            },
+            {
+                section: "Quantitative Aptitude",
+                question: "What is the ratio of 3/4 to 9/16?",
+                options: ["3:2", "4:3", "4:9", "1:2"],
+                correct: 1
+            },
+            {
+                section: "Data Interpretation",
+                question: "The following table shows the number of students in five departments:\n\n| Department | Students |\n|------------|----------|\n| MARD       | 120      |\n| MSW        | 100      |\n| MA-SOC     | 80       |\n| MA-ECO     | 60       |\n| MA-POL     | 40       |\n\nWhat is the total number of students across all departments?",
+                options: ["350", "400", "450", "500"],
+                correct: 1
+            },
+            {
+                section: "Data Interpretation",
+                question: "The following table shows the number of students in five departments:\n\n| Department | Students |\n|------------|----------|\n| MARD       | 120      |\n| MSW        | 100      |\n| MA-SOC     | 80       |\n| MA-ECO     | 60       |\n| MA-POL     | 40       |\n\nWhich department has the second-highest number of students?",
+                options: ["MSW", "MA-SOC", "MA-ECO", "MA-POL"],
+                correct: 0
+            },
+            {
+                section: "Data Interpretation",
+                question: "The following table shows the number of students in five departments:\n\n| Department | Students |\n|------------|----------|\n| MARD       | 120      |\n| MSW        | 100      |\n| MA-SOC     | 80       |\n| MA-ECO     | 60       |\n| MA-POL     | 40       |\n\nWhat percentage of total students are from MSW?",
+                options: ["20%", "25%", "30%", "35%"],
+                correct: 1
+            },
+            {
+                section: "Data Interpretation",
+                question: "The following table shows the number of students in five departments:\n\n| Department | Students |\n|------------|----------|\n| MARD       | 120      |\n| MSW        | 100      |\n| MA-SOC     | 80       |\n| MA-ECO     | 60       |\n| MA-POL     | 40       |\n\nWhich department has 25% students compared to MARD?",
+                options: ["MA-ECO", "MA-POL", "MA-SOC", "MSW"],
+                correct: 0
+            },
+            {
+                section: "Data Interpretation",
+                question: "The following table shows the number of students in five departments:\n\n| Department | Students |\n|------------|----------|\n| MARD       | 120      |\n| MSW        | 100      |\n| MA-SOC     | 80       |\n| MA-ECO     | 60       |\n| MA-POL     | 40       |\n\nWhich two departments combined make up half of the total students?",
+                options: ["MARD & MA-POL", "MARD & MSW", "MSW & MA-SOC", "MA-ECO & MA-POL"],
+                correct: 1
+            },
+            {
+                section: "Verbal Ability",
+                question: "Choose the correct synonym for 'Abundant':",
+                options: ["Scarce", "Plenty", "Rare", "Limited"],
+                correct: 1
+            },
+            {
+                section: "Verbal Ability",
+                question: "Identify the grammatically correct sentence:",
+                options: ["Each of the students have submitted their assignments.", "Each of the students has submitted their assignment.", "Each of the students have submitted his assignment.", "Each of the students has submitted his assignment."],
+                correct: 3
+            },
+            {
+                section: "Verbal Ability",
+                question: "Complete the sentence: 'The committee _____ its decision yesterday.'",
+                options: ["announce", "announced", "announcing", "announces"],
+                correct: 1
+            },
+            {
+                section: "Verbal Ability",
+                question: "Choose the antonym for 'Rigid':",
+                options: ["Flexible", "Hard", "Strong", "Loose"],
+                correct: 0
+            },
+            {
+                section: "Verbal Ability",
+                question: "Which word is spelled correctly?",
+                options: ["Occassion", "Occasion", "Ocasion", "Occassion"],
+                correct: 1
+            },
+            {
+                section: "General Awareness",
+                question: "The Mahatma Gandhi National Rural Employment Guarantee Act (MGNREGA) now provides work for how many days per year?",
+                options: ["100", "150", "200", "250"],
+                correct: 0
+            },
+            {
+                section: "General Awareness",
+                question: "Which ministry is responsible for implementing the Pradhan Mantri Awas Yojana (Rural)?",
+                options: ["Ministry of Housing and Urban Affairs", "Ministry of Rural Development", "Ministry of Agriculture", "Ministry of Social Justice"],
+                correct: 1
+            },
+            {
+                section: "General Awareness",
+                question: "The Sustainable Development Goal (SDG) that focuses on 'No Poverty' is:",
+                options: ["SDG 1", "SDG 2", "SDG 3", "SDG 4"],
+                correct: 0
+            },
+            {
+                section: "General Awareness",
+                question: "Which state has the highest rural population in India according to Census 2011?",
+                options: ["Uttar Pradesh", "Bihar", "West Bengal", "Madhya Pradesh"],
+                correct: 0
+            },
+            {
+                section: "General Awareness",
+                question: "The National Sample Survey Office (NSSO) is under which ministry?",
+                options: ["Ministry of Statistics and Programme Implementation", "Ministry of Rural Development", "Ministry of Agriculture", "Ministry of Finance"],
+                correct: 0
+            },
+            // Additional Logical Reasoning Questions
+            {
+                section: "Logical Reasoning",
+                question: "In a certain code, FRIEND is written as HUMJTK. How is CANDLE written in that code?",
+                options: ["EDRIRL", "ECQFNG", "DCQFMG", "ECQGMH"],
+                correct: 1
+            },
+            {
+                section: "Logical Reasoning",
+                question: "If South-East becomes North, North-East becomes West, and so on. What does South become?",
+                options: ["North-East", "East", "North-West", "West"],
+                correct: 1
+            },
+            {
+                section: "Logical Reasoning",
+                question: "Complete the series: AZ, BY, CX, DW, ?",
+                options: ["EV", "FU", "EW", "FV"],
+                correct: 0
+            },
+            {
+                section: "Logical Reasoning",
+                question: "If WATER is coded as 12345 and POWER is coded as 89145, how is TOWER coded?",
+                options: ["39145", "48145", "58145", "68145"],
+                correct: 2
+            },
+            {
+                section: "Logical Reasoning",
+                question: "Find the missing number: 8, 27, 64, 125, ?",
+                options: ["216", "256", "343", "512"],
+                correct: 0
+            },
+            // Additional Quantitative Aptitude Questions
+            {
+                section: "Quantitative Aptitude",
+                question: "A sum of money doubles itself in 8 years at simple interest. What is the rate of interest?",
+                options: ["12.5%", "15%", "10%", "8%"],
+                correct: 0
+            },
+            {
+                section: "Quantitative Aptitude",
+                question: "The compound interest on ₹10,000 for 2 years at 10% per annum is:",
+                options: ["₹2,000", "₹2,100", "₹2,200", "₹2,500"],
+                correct: 1
+            },
+            {
+                section: "Quantitative Aptitude",
+                question: "A pipe can fill a tank in 6 hours. Another pipe can empty it in 8 hours. If both pipes are opened, the tank will be filled in:",
+                options: ["24 hours", "20 hours", "18 hours", "14 hours"],
+                correct: 0
+            },
+            {
+                section: "Quantitative Aptitude",
+                question: "The area of a circle with radius 7 cm is:",
+                options: ["154 cm²", "144 cm²", "164 cm²", "174 cm²"],
+                correct: 0
+            },
+            {
+                section: "Quantitative Aptitude",
+                question: "If x + y = 10 and xy = 21, then x² + y² = ?",
+                options: ["58", "62", "54", "50"],
+                correct: 0
+            },
+            // Additional Data Interpretation Questions
+            {
+                section: "Data Interpretation",
+                question: "A company's profit increased from ₹50,000 to ₹65,000. What is the percentage increase?",
+                options: ["25%", "30%", "35%", "40%"],
+                correct: 1
+            },
+            {
+                section: "Data Interpretation",
+                question: "In a class of 40 students, 60% are boys. How many girls are there?",
+                options: ["16", "18", "20", "24"],
+                correct: 0
+            },
+            {
+                section: "Data Interpretation",
+                question: "The ratio of income to expenditure is 5:4. If income is ₹25,000, what is the savings?",
+                options: ["₹5,000", "₹4,000", "₹6,000", "₹3,000"],
+                correct: 0
+            },
+            {
+                section: "Data Interpretation",
+                question: "A shopkeeper sells 3 items for ₹100 each. His profit on the first is 25%, loss on second is 25%, and profit on third is 50%. What is his overall profit/loss?",
+                options: ["₹25 profit", "₹20 profit", "₹30 profit", "₹15 profit"],
+                correct: 1
+            },
+            {
+                section: "Data Interpretation",
+                question: "If 20% of A = 30% of B, then A:B = ?",
+                options: ["2:3", "3:2", "4:3", "3:4"],
+                correct: 1
+            },
+            // Additional Verbal Ability Questions
+            {
+                section: "Verbal Ability",
+                question: "Choose the correct antonym for 'Optimistic':",
+                options: ["Hopeful", "Positive", "Pessimistic", "Confident"],
+                correct: 2
+            },
+            {
+                section: "Verbal Ability",
+                question: "Fill in the blank: 'The meeting has been _____ to next week.'",
+                options: ["postponed", "preponed", "advanced", "delayed"],
+                correct: 0
+            },
+            {
+                section: "Verbal Ability",
+                question: "Identify the correctly spelled word:",
+                options: ["Accomodation", "Accommodation", "Acomodation", "Acommodation"],
+                correct: 1
+            },
+            {
+                section: "Verbal Ability",
+                question: "Choose the synonym for 'Meticulous':",
+                options: ["Careless", "Careful", "Quick", "Slow"],
+                correct: 1
+            },
+            {
+                section: "Verbal Ability",
+                question: "Complete the idiom: 'A bird in the hand is worth _____ in the bush.'",
+                options: ["one", "two", "three", "four"],
+                correct: 1
+            },
+            // Additional General Awareness Questions
+            {
+                section: "General Awareness",
+                question: "Which article of the Indian Constitution deals with Right to Education?",
+                options: ["Article 19", "Article 21A", "Article 25", "Article 32"],
+                correct: 1
+            },
+            {
+                section: "General Awareness",
+                question: "The Panchayati Raj system was introduced by which constitutional amendment?",
+                options: ["71st Amendment", "72nd Amendment", "73rd Amendment", "74th Amendment"],
+                correct: 2
+            },
+            {
+                section: "General Awareness",
+                question: "Which scheme aims to provide financial assistance to pregnant women?",
+                options: ["Janani Suraksha Yojana", "Pradhan Mantri Matru Vandana Yojana", "Beti Bachao Beti Padhao", "Sukanya Samriddhi Yojana"],
+                correct: 1
+            },
+            {
+                section: "General Awareness",
+                question: "The National Rural Health Mission was launched in which year?",
+                options: ["2005", "2006", "2007", "2008"],
+                correct: 0
+            },
+            {
+                section: "General Awareness",
+                question: "Which committee recommended the establishment of Panchayati Raj institutions?",
+                options: ["Balwant Rai Mehta Committee", "Ashok Mehta Committee", "G.V.K. Rao Committee", "L.M. Singhvi Committee"],
+                correct: 0
+            }
+        ];
+
+        // Selected questions for current test (will be randomized)
+        let questions = [];
+
+        // Function to randomize questions from the question bank
+        function randomizeQuestions() {
+            // Ensure we have enough questions in each section
+            const sectionQuestions = {
+                'Logical Reasoning': [],
+                'Quantitative Aptitude': [],
+                'Data Interpretation': [],
+                'Verbal Ability': [],
+                'General Awareness': []
+            };
+
+            // Group questions by section
+            questionBank.forEach(question => {
+                sectionQuestions[question.section].push(question);
+            });
+
+            // Select 5 random questions from each section
+            questions = [];
+            Object.keys(sectionQuestions).forEach(section => {
+                const sectionPool = [...sectionQuestions[section]]; // Create a copy
+                const selectedQuestions = [];
+                
+                // Randomly select 5 questions from this section
+                for (let i = 0; i < 5 && sectionPool.length > 0; i++) {
+                    const randomIndex = Math.floor(Math.random() * sectionPool.length);
+                    selectedQuestions.push(sectionPool[randomIndex]);
+                    sectionPool.splice(randomIndex, 1); // Remove selected question
+                }
+                
+                questions.push(...selectedQuestions);
+            });
+
+            // Shuffle the final array to mix sections
+            for (let i = questions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [questions[i], questions[j]] = [questions[j], questions[i]];
+            }
+
+            console.log(`Generated ${questions.length} unique questions for this test`);
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            randomizeQuestions(); // Generate unique question set
+        });
+
+        function setupEventListeners() {
+            // Start test button
+            document.getElementById('startTestBtn').addEventListener('click', startTest);
+            
+            // Navigation buttons
+            document.getElementById('prevBtn').addEventListener('click', previousQuestion);
+            document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+            document.getElementById('markBtn').addEventListener('click', markForReview);
+            document.getElementById('clearBtn').addEventListener('click', clearResponse);
+            
+            // Submit test button - DIRECT ONCLICK
+            document.getElementById('submitTestBtn').onclick = function() {
+                alert('Submit button clicked! Processing...');
+                submitTestNow();
+            };
+            
+            // Start new test button
+            document.getElementById('startNewTestBtn').addEventListener('click', startNewTest);
+        }
+
+        function startTest() {
+            // Basic validation
+            const name = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const roll = document.getElementById('rollNumber').value.trim();
+            const programme = document.getElementById('programme').value;
+            const year = document.getElementById('year').value;
+
+            if (!name || !email || !roll || !programme || !year) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // Store student data
+            studentData = { name, email, roll, programme, year };
+
+            // Generate new randomized questions for this student
+            randomizeQuestions();
+
+            // Hide registration, show test
+            document.getElementById('registrationForm').classList.add('hidden');
+            document.getElementById('testInterface').classList.remove('hidden');
+
+            // Initialize test
+            initializeTest();
+        }
+
+        function initializeTest() {
+            // Create question palette
+            const palette = document.getElementById('questionPalette');
+            palette.innerHTML = '';
+            
+            for (let i = 0; i < 25; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'w-10 h-10 rounded bg-red-500 text-white font-medium hover:bg-red-600 transition-colors';
+                btn.textContent = i + 1;
+                btn.addEventListener('click', () => goToQuestion(i));
+                palette.appendChild(btn);
+            }
+
+            // Start timer
+            startTimer();
+            
+            // Load first question
+            loadQuestion();
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 300) {
+                    document.getElementById('timer').classList.add('timer-warning', 'text-red-600');
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert('Time is up! Auto-submitting...');
+                    handleSubmit();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            const content = document.getElementById('questionContent');
+            
+            // Format question text with proper table styling
+            let formattedQuestion = question.question;
+            
+            // Convert markdown-style table to HTML table for Data Interpretation questions
+            if (question.section === "Data Interpretation" && formattedQuestion.includes("|")) {
+                const lines = formattedQuestion.split('\n');
+                let tableHTML = '';
+                let questionText = '';
+                let inTable = false;
+                
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    
+                    if (line.includes('|') && line.includes('Department')) {
+                        // Start of table
+                        inTable = true;
+                        tableHTML += '<div class="my-4 overflow-x-auto"><table class="min-w-full border-collapse border border-gray-300 bg-white rounded-lg shadow-sm">';
+                        const headers = line.split('|').filter(cell => cell.trim() !== '');
+                        tableHTML += '<thead class="bg-blue-50"><tr>';
+                        headers.forEach(header => {
+                            tableHTML += `<th class="border border-gray-300 px-4 py-2 text-left font-semibold text-gray-800">${header.trim()}</th>`;
+                        });
+                        tableHTML += '</tr></thead><tbody>';
+                    } else if (line.includes('|') && line.includes('-')) {
+                        // Skip separator line
+                        continue;
+                    } else if (line.includes('|') && inTable) {
+                        // Table data row
+                        const cells = line.split('|').filter(cell => cell.trim() !== '');
+                        tableHTML += '<tr class="hover:bg-gray-50">';
+                        cells.forEach((cell, index) => {
+                            const cellClass = index === 0 ? 'font-medium text-blue-700' : 'text-gray-700';
+                            tableHTML += `<td class="border border-gray-300 px-4 py-2 ${cellClass}">${cell.trim()}</td>`;
+                        });
+                        tableHTML += '</tr>';
+                    } else if (inTable && line === '') {
+                        // End of table
+                        tableHTML += '</tbody></table></div>';
+                        inTable = false;
+                    } else if (!inTable) {
+                        // Regular question text
+                        questionText += line + '\n';
+                    }
+                }
+                
+                if (inTable) {
+                    tableHTML += '</tbody></table></div>';
+                }
+                
+                formattedQuestion = questionText + tableHTML;
+            }
+            
+            content.innerHTML = `
+                <h3 class="text-xl font-semibold mb-4">Question ${currentQuestion + 1}</h3>
+                <div class="text-gray-700 mb-6 whitespace-pre-line">${formattedQuestion}</div>
+                <div class="space-y-3">
+                    ${question.options.map((option, index) => `
+                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                            <input type="radio" name="answer" value="${index}" class="mr-3" 
+                                   ${answers[currentQuestion] == index ? 'checked' : ''}
+                                   onchange="saveAnswer(${index})">
+                            <span>${String.fromCharCode(65 + index)}) ${option}</span>
+                        </label>
+                    `).join('')}
+                </div>
+            `;
+
+            // Update displays
+            document.getElementById('currentSection').textContent = question.section;
+            document.getElementById('currentQ').textContent = currentQuestion + 1;
+            
+            const progress = ((currentQuestion + 1) / 25) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').textContent = currentQuestion === 24 ? 'Submit Test' : 'Next';
+            
+            updateQuestionPalette();
+        }
+
+        function saveAnswer(answerIndex) {
+            answers[currentQuestion] = answerIndex;
+            updateQuestionPalette();
+        }
+
+        function updateQuestionPalette() {
+            const palette = document.getElementById('questionPalette');
+            const buttons = palette.children;
+            
+            for (let i = 0; i < buttons.length; i++) {
+                const btn = buttons[i];
+                btn.className = 'w-10 h-10 rounded font-medium transition-colors ';
+                
+                if (i === currentQuestion) {
+                    btn.className += 'bg-blue-500 text-white';
+                } else if (answers.hasOwnProperty(i)) {
+                    btn.className += 'bg-green-500 text-white hover:bg-green-600';
+                } else if (markedForReview.has(i)) {
+                    btn.className += 'bg-yellow-500 text-white hover:bg-yellow-600';
+                } else {
+                    btn.className += 'bg-red-500 text-white hover:bg-red-600';
+                }
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < 24) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                // Last question - show submit confirmation
+                if (confirm('You are on the last question. Ready to submit?')) {
+                    handleSubmit();
+                }
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+
+        function goToQuestion(questionIndex) {
+            currentQuestion = questionIndex;
+            loadQuestion();
+        }
+
+        function markForReview() {
+            markedForReview.add(currentQuestion);
+            updateQuestionPalette();
+            alert('Question marked for review!');
+        }
+
+        function clearResponse() {
+            delete answers[currentQuestion];
+            const radios = document.querySelectorAll('input[name="answer"]');
+            radios.forEach(radio => radio.checked = false);
+            updateQuestionPalette();
+            alert('Response cleared!');
+        }
+
+        // DIRECT SUBMIT FUNCTION
+        function submitTestNow() {
+            // Stop timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+
+            // Calculate complete results
+            let totalScore = 0;
+            const sectionScores = {
+                'Logical Reasoning': 0,
+                'Quantitative Aptitude': 0,
+                'Data Interpretation': 0,
+                'Verbal Ability': 0,
+                'General Awareness': 0
+            };
+
+            // Calculate scores properly
+            for (let i = 0; i < questions.length; i++) {
+                const question = questions[i];
+                const userAnswer = answers[i];
+                
+                if (userAnswer !== undefined && userAnswer === question.correct) {
+                    totalScore++;
+                    sectionScores[question.section]++;
+                }
+            }
+
+            // Create complete results object
+            const results = {
+                totalScore: totalScore,
+                sectionScores: sectionScores,
+                answeredQuestions: Object.keys(answers).length,
+                timeSpent: 1800 - timeLeft,
+                percentage: (totalScore / 25) * 100
+            };
+
+            // Show complete results with statistics
+            showResults(results);
+        }
+
+        // BACKUP SUBMIT FUNCTION
+        function handleSubmit() {
+            // Stop timer immediately
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+
+            // Show confirmation
+            if (timeLeft > 0) {
+                const confirmed = confirm('Are you sure you want to submit the test?');
+                if (!confirmed) {
+                    startTimer(); // Restart timer if cancelled
+                    return;
+                }
+            }
+
+            // Calculate score
+            let totalScore = 0;
+            const sectionScores = {
+                'Logical Reasoning': 0,
+                'Quantitative Aptitude': 0,
+                'Data Interpretation': 0,
+                'Verbal Ability': 0,
+                'General Awareness': 0
+            };
+
+            // Simple scoring loop
+            for (let i = 0; i < questions.length; i++) {
+                const question = questions[i];
+                const userAnswer = answers[i];
+                
+                if (userAnswer !== undefined && userAnswer === question.correct) {
+                    totalScore++;
+                    sectionScores[question.section]++;
+                }
+            }
+
+            // Store results
+            const results = {
+                totalScore: totalScore,
+                sectionScores: sectionScores,
+                answeredQuestions: Object.keys(answers).length,
+                timeSpent: 1800 - timeLeft,
+                percentage: (totalScore / 25) * 100
+            };
+
+            // Show results immediately
+            showResults(results);
+        }
+
+        function showResults(results) {
+            // Hide test interface
+            document.getElementById('testInterface').classList.add('hidden');
+            
+            // Show results section
+            document.getElementById('resultsSection').classList.remove('hidden');
+
+            // Display total score
+            document.getElementById('totalScore').textContent = results.totalScore;
+
+            // Display pass/fail status
+            const statusElement = document.getElementById('resultStatus');
+            if (results.percentage >= 60) {
+                statusElement.textContent = '✅ PASSED';
+                statusElement.className = 'text-lg font-semibold mt-2 text-green-600';
+            } else {
+                statusElement.textContent = '❌ FAILED';
+                statusElement.className = 'text-lg font-semibold mt-2 text-red-600';
+            }
+
+            // Display section analysis
+            const analysisDiv = document.getElementById('sectionAnalysis');
+            let analysisHTML = '';
+            
+            Object.entries(results.sectionScores).forEach(([section, score]) => {
+                analysisHTML += `
+                    <div class="flex justify-between items-center p-2 bg-gray-50 rounded mb-2">
+                        <span class="font-medium">${section}</span>
+                        <span class="text-blue-600 font-semibold">${score}/5</span>
+                    </div>
+                `;
+            });
+
+            // Add statistics
+            const timeMinutes = Math.floor(results.timeSpent / 60);
+            const timeSeconds = results.timeSpent % 60;
+            
+            analysisHTML += `
+                <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+                    <h4 class="font-semibold text-blue-800 mb-2">📊 Test Statistics</h4>
+                    <p class="text-sm text-blue-700">Questions Answered: ${results.answeredQuestions}/25</p>
+                    <p class="text-sm text-blue-700">Time Spent: ${timeMinutes}m ${timeSeconds}s</p>
+                    <p class="text-sm text-blue-700">Percentage: ${results.percentage.toFixed(1)}%</p>
+                </div>
+            `;
+            
+            analysisDiv.innerHTML = analysisHTML;
+            
+            // Update statistics
+            updateTestStatistics(results);
+
+            alert('🎉 Test submitted successfully! Check your results below.');
+        }
+
+        // Update test statistics
+        function updateTestStatistics(results) {
+            // Increment total respondents
+            testStatistics.totalRespondents++;
+            
+            // Update pass/fail counts
+            if (results.percentage >= 60) {
+                testStatistics.passedCount++;
+            } else {
+                testStatistics.failedCount++;
+            }
+            
+            // Store complete student record
+            const studentRecord = {
+                name: studentData.name,
+                email: studentData.email,
+                rollNumber: studentData.roll,
+                programme: studentData.programme,
+                year: studentData.year,
+                score: results.totalScore,
+                percentage: results.percentage.toFixed(1),
+                status: results.percentage >= 60 ? 'PASSED' : 'FAILED',
+                timestamp: new Date().toLocaleString(),
+                timeSpent: results.timeSpent,
+                answeredQuestions: results.answeredQuestions
+            };
+            
+            // Add to student records
+            studentRecords.push(studentRecord);
+            
+            // Add to recent submissions (anonymous) - use current total for numbering
+            const submission = {
+                name: `Student ${testStatistics.totalRespondents}`,
+                programme: studentData.programme,
+                score: results.totalScore,
+                percentage: results.percentage.toFixed(1),
+                status: results.percentage >= 60 ? 'PASSED' : 'FAILED',
+                timestamp: new Date().toLocaleString()
+            };
+            
+            // Add to beginning of array (most recent first)
+            testStatistics.recentSubmissions.unshift(submission);
+            
+            // Keep only last 15 submissions for better tracking
+            if (testStatistics.recentSubmissions.length > 15) {
+                testStatistics.recentSubmissions = testStatistics.recentSubmissions.slice(0, 15);
+            }
+            
+            // Update display immediately
+            displayTestStatistics();
+        }
+        
+        function displayTestStatistics() {
+            // Update counters
+            document.getElementById('totalRespondents').textContent = testStatistics.totalRespondents;
+            document.getElementById('passedCount').textContent = testStatistics.passedCount;
+            document.getElementById('failedCount').textContent = testStatistics.failedCount;
+            
+            // Update recent submissions
+            const recentDiv = document.getElementById('recentSubmissions');
+            if (testStatistics.recentSubmissions.length === 0) {
+                recentDiv.innerHTML = '<p class="text-gray-500">No submissions yet.</p>';
+            } else {
+                let submissionsHTML = '';
+                testStatistics.recentSubmissions.forEach((submission, index) => {
+                    const statusColor = submission.status === 'PASSED' ? 'text-green-600' : 'text-red-600';
+                    submissionsHTML += `
+                        <div class="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
+                            <div>
+                                <span class="font-medium">${submission.name}</span>
+                                <span class="text-gray-500 text-xs ml-2">(${submission.programme})</span>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-semibold ${statusColor}">${submission.score}/25 (${submission.percentage}%)</div>
+                                <div class="text-xs text-gray-500">${submission.timestamp}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                recentDiv.innerHTML = submissionsHTML;
+            }
+        }
+
+        function toggleAnswerReview() {
+            const reviewDiv = document.getElementById('answerReview');
+            const toggleBtn = document.getElementById('toggleAnswers');
+            
+            if (reviewDiv.classList.contains('hidden')) {
+                // Show answers
+                generateAnswerReview();
+                reviewDiv.classList.remove('hidden');
+                toggleBtn.textContent = 'Hide Answers';
+            } else {
+                // Hide answers
+                reviewDiv.classList.add('hidden');
+                toggleBtn.textContent = 'Show Answers';
+            }
+        }
+
+        function generateAnswerReview() {
+            const reviewDiv = document.getElementById('answerReview');
+            let reviewHTML = '';
+            
+            questions.forEach((question, index) => {
+                const userAnswer = answers[index];
+                const correctAnswer = question.correct;
+                const isCorrect = userAnswer === correctAnswer;
+                const wasAnswered = userAnswer !== undefined;
+                
+                // Status styling
+                let statusClass = '';
+                let statusIcon = '';
+                let statusText = '';
+                
+                if (!wasAnswered) {
+                    statusClass = 'border-l-4 border-gray-400 bg-gray-50';
+                    statusIcon = '⚪';
+                    statusText = 'Not Answered';
+                } else if (isCorrect) {
+                    statusClass = 'border-l-4 border-green-500 bg-green-50';
+                    statusIcon = '✅';
+                    statusText = 'Correct';
+                } else {
+                    statusClass = 'border-l-4 border-red-500 bg-red-50';
+                    statusIcon = '❌';
+                    statusText = 'Incorrect';
+                }
+                
+                reviewHTML += `
+                    <div class="p-4 rounded-lg ${statusClass}">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-lg">Question ${index + 1}</h4>
+                            <span class="text-sm font-medium px-2 py-1 rounded ${isCorrect ? 'bg-green-200 text-green-800' : wasAnswered ? 'bg-red-200 text-red-800' : 'bg-gray-200 text-gray-800'}">
+                                ${statusIcon} ${statusText}
+                            </span>
+                        </div>
+                        <p class="text-gray-700 mb-3 text-sm">${question.question}</p>
+                        <div class="grid grid-cols-1 gap-2">
+                            ${question.options.map((option, optIndex) => {
+                                let optionClass = 'p-2 rounded text-sm ';
+                                let optionIcon = '';
+                                
+                                if (optIndex === correctAnswer) {
+                                    optionClass += 'bg-green-100 border border-green-300 text-green-800';
+                                    optionIcon = '✓ ';
+                                } else if (optIndex === userAnswer && userAnswer !== correctAnswer) {
+                                    optionClass += 'bg-red-100 border border-red-300 text-red-800';
+                                    optionIcon = '✗ ';
+                                } else {
+                                    optionClass += 'bg-gray-100 border border-gray-200 text-gray-700';
+                                }
+                                
+                                return `
+                                    <div class="${optionClass}">
+                                        ${optionIcon}${String.fromCharCode(65 + optIndex)}) ${option}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        <div class="mt-2 text-xs text-gray-600">
+                            <span class="font-medium">Section:</span> ${question.section}
+                            ${wasAnswered ? ` | <span class="font-medium">Your Answer:</span> ${String.fromCharCode(65 + userAnswer)}` : ''}
+                            | <span class="font-medium">Correct Answer:</span> ${String.fromCharCode(65 + correctAnswer)}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            reviewDiv.innerHTML = reviewHTML;
+        }
+
+        // Function to start a completely new test
+        function startNewTest() {
+            const confirmed = confirm('🔄 Start a new test?\n\nThis will:\n✅ Generate 25 fresh questions\n✅ Reset all answers and timer\n✅ Return to registration form\n\nContinue?');
+            
+            if (confirmed) {
+                // Reset all test state
+                currentQuestion = 0;
+                timeLeft = 1800;
+                answers = {};
+                markedForReview = new Set();
+                studentData = {};
+                
+                // Clear timer
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+                
+                // Generate new questions
+                randomizeQuestions();
+                
+                // Show registration form, hide others
+                document.getElementById('registrationForm').classList.remove('hidden');
+                document.getElementById('testInterface').classList.add('hidden');
+                document.getElementById('resultsSection').classList.add('hidden');
+                
+                // Clear registration form
+                document.getElementById('fullName').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('rollNumber').value = '';
+                document.getElementById('programme').value = '';
+                document.getElementById('year').value = '';
+                
+                alert('🆕 New test ready! Fresh questions generated. Please register to begin.');
+            }
+        }
+
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'968b32d5710bc617',t:'MTc1NDExMjc4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
